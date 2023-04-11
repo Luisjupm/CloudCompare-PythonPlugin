@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; CloudCompare-PythonPlugin  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cccorelib (Python)" href="python/cccorelib/index.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" />
+<link href="_static/style.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CloudCompare-PythonPlugin
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Plugin Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building from sources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-ccpointcloud-from-python">Creating a ccPointCloud from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-a-file">Loading a file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sub-sampling">Sub sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#merge">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#crop2d">Crop2D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-opengl-transformations">Using OpenGL Transformations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#translation">Translation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rotation">Rotation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">APIs Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python/cccorelib/index.html">cccorelib (Python)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python/pycc/index.html">pycc (Python)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/qCC_db/index.html">qCC_db (C++)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp/CCCoreLib/index.html">CCCoreLib (C++)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CloudCompare-PythonPlugin</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
+<section id="creating-a-ccpointcloud-from-python">
+<h2>Creating a ccPointCloud from Python<a class="headerlink" href="#creating-a-ccpointcloud-from-python" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycc</span>
+<span class="kn">import</span> <span class="nn">laspy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># This example shows how to create a ccPointCloud from your custom data</span>
+<span class="c1"># here, we will load data from a las file using laspy.</span>
+
+<span class="c1"># Note that the resulting ccPointCloud&#39;s point values and scalar field values</span>
+<span class="c1"># will be copies.</span>
+
+<span class="n">path_to_las</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;L:\R1_F_0+000_0+050.las&quot;</span>
+
+<span class="n">las</span> <span class="o">=</span> <span class="n">laspy</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path_to_las</span><span class="p">)</span>
+
+<span class="c1"># Be aware that CloudCompare stores coordinates on 32 bit floats.</span>
+<span class="c1"># To avoid losing too much precision you should &#39;shift&#39; your coordinates</span>
+<span class="c1"># if they are 64 bit floats (which is the default in python land)</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="p">(</span><span class="n">las</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">las</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">x_min</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">pycc</span><span class="o">.</span><span class="n">PointCoordinateType</span><span class="p">)</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="p">(</span><span class="n">las</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">las</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">y_min</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">pycc</span><span class="o">.</span><span class="n">PointCoordinateType</span><span class="p">)</span>
+<span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">las</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">las</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">z_min</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">pycc</span><span class="o">.</span><span class="n">PointCoordinateType</span><span class="p">)</span>
+
+<span class="n">point_cloud</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">ccPointCloud</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">zs</span><span class="p">)</span>
+<span class="c1"># Add the global shift to CloudCompare so that it can use it,</span>
+<span class="c1"># for example to display the real coordinates in point picking tool</span>
+<span class="n">point_cloud</span><span class="o">.</span><span class="n">setGlobalShift</span><span class="p">(</span><span class="o">-</span><span class="n">las</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">x_min</span><span class="p">,</span> <span class="o">-</span><span class="n">las</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">y_min</span><span class="p">,</span> <span class="o">-</span><span class="n">las</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">z_min</span><span class="p">)</span>
+<span class="n">point_cloud</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="n">path_to_las</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">point_cloud</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+
+<span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">xs</span> <span class="o">==</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">points</span><span class="p">()[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Adding scalar field &amp; copying values the manual way</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">addScalarField</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+
+<span class="n">classification_array</span> <span class="o">=</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">getScalarField</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">asArray</span><span class="p">()</span>
+<span class="n">classification_array</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">las</span><span class="o">.</span><span class="n">classification</span><span class="p">[:]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">classification_array</span><span class="p">)</span>
+
+<span class="c1"># Or give the values directly</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">addScalarField</span><span class="p">(</span><span class="s2">&quot;intensity&quot;</span><span class="p">,</span> <span class="n">las</span><span class="o">.</span><span class="n">intensity</span><span class="p">)</span>
+<span class="n">intensity_array</span> <span class="o">=</span> <span class="n">point_cloud</span><span class="o">.</span><span class="n">getScalarField</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">asArray</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">intensity_array</span><span class="p">[:])</span>
+
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">cc</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># We are in &quot;embedded mode&quot;, add the point cloud to the DB</span>
+<span class="c1"># but first we should compute min and max for the scalarfields</span>
+<span class="c1"># so that their color ranges displays properly</span>
+<span class="n">point_cloud</span><span class="o">.</span><span class="n">getScalarField</span><span class="p">(</span><span class="n">point_cloud</span><span class="o">.</span><span class="n">getScalarFieldIndexByName</span><span class="p">(</span><span class="s2">&quot;intensity&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">computeMinAndMax</span><span class="p">()</span>
+<span class="n">point_cloud</span><span class="o">.</span><span class="n">getScalarField</span><span class="p">(</span><span class="n">point_cloud</span><span class="o">.</span><span class="n">getScalarFieldIndexByName</span><span class="p">(</span><span class="s2">&quot;classification&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">computeMinAndMax</span><span class="p">()</span>
+
+<span class="n">cc</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">point_cloud</span><span class="p">)</span>
+<span class="n">cc</span><span class="o">.</span><span class="n">updateUI</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="loading-a-file">
+<h2>Loading a file<a class="headerlink" href="#loading-a-file" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycc</span>
+
+<span class="n">CC</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">FileIOFilter</span><span class="o">.</span><span class="n">LoadParameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">parentWidget</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">getMainWindow</span><span class="p">()</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;~\Projects\CloudCompare\plugins\private\CloudCompare-PythonPlugin\tests\data\a_cloud.bin&quot;</span>
+
+
+<span class="c1"># This automatically adds the loaded entities</span>
+<span class="c1"># to the DB on success, and raises an exception if an error occured</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">loadFile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+
+<span class="c1"># This does not add to the DB, and returns None if the loading failed</span>
+<span class="n">obj</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">FileIOFilter</span><span class="o">.</span><span class="n">LoadFromFile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to load the file&quot;</span><span class="p">)</span>
+    <span class="n">CC</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">FileIOFilter</span><span class="o">.</span><span class="n">SaveParameters</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">FileIOFilter</span><span class="o">.</span><span class="n">SaveToFile</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;savedFromPlugin.bin&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">FileIOFilter</span><span class="o">.</span><span class="n">SaveToFile</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="sa">r</span><span class="s1">&#39;savedFromPlugin.laz&#39;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="sub-sampling">
+<h2>Sub sampling<a class="headerlink" href="#sub-sampling" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cccorelib</span>
+<span class="kn">import</span> <span class="nn">pycc</span>
+
+<span class="n">CC</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">doSubSampling</span><span class="p">(</span><span class="n">pc</span><span class="p">):</span>
+    <span class="n">refcloud</span> <span class="o">=</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CloudSamplingTools</span><span class="o">.</span><span class="n">subsampleCloudRandomly</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="n">pc</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">randomPc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">partialClone</span><span class="p">(</span><span class="n">refcloud</span><span class="p">)</span>
+    <span class="n">randomPc</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;Randomly subsampled&quot;</span><span class="p">)</span>
+    <span class="n">CC</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">randomPc</span><span class="p">)</span>
+
+    <span class="n">refcloud</span> <span class="o">=</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CloudSamplingTools</span><span class="o">.</span><span class="n">subsampleCloudWithOctree</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="n">pc</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span>
+                                                                     <span class="n">cccorelib</span><span class="o">.</span><span class="n">CloudSamplingTools</span><span class="o">.</span><span class="n">RANDOM_POINT</span><span class="p">)</span>
+    <span class="n">randomPc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">partialClone</span><span class="p">(</span><span class="n">refcloud</span><span class="p">)</span>
+    <span class="n">randomPc</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;Subsampled using octree (RANDOM_POINT)&quot;</span><span class="p">)</span>
+    <span class="n">CC</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">randomPc</span><span class="p">)</span>
+
+    <span class="n">refcloud</span> <span class="o">=</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CloudSamplingTools</span><span class="o">.</span><span class="n">subsampleCloudWithOctree</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="n">pc</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span>
+                                                                     <span class="n">cccorelib</span><span class="o">.</span><span class="n">CloudSamplingTools</span><span class="o">.</span><span class="n">NEAREST_POINT_TO_CELL_CENTER</span><span class="p">)</span>
+    <span class="n">randomPc</span> <span class="o">=</span> <span class="n">pc</span><span class="o">.</span><span class="n">partialClone</span><span class="p">(</span><span class="n">refcloud</span><span class="p">)</span>
+    <span class="n">randomPc</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;Subsampled using octree (NEAREST_POINT_TO_CELL_CENTER)&quot;</span><span class="p">)</span>
+    <span class="n">CC</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">randomPc</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">entities</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">getSelectedEntities</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Selected entities: </span><span class="si">{</span><span class="n">entities</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">entities</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No entities selected&quot;</span><span class="p">)</span>
+
+    <span class="n">pointCloud</span> <span class="o">=</span> <span class="n">entities</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pointCloud</span><span class="p">)</span>
+
+    <span class="n">pycc</span><span class="o">.</span><span class="n">RunInThread</span><span class="p">(</span><span class="n">doSubSampling</span><span class="p">,</span> <span class="n">pointCloud</span><span class="p">)</span>
+
+    <span class="n">CC</span><span class="o">.</span><span class="n">updateUI</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="merge">
+<h2>Merge<a class="headerlink" href="#merge" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycc</span>
+
+
+<span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">clouds</span><span class="p">):</span>
+    <span class="n">total_num_points</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">cloud</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="k">for</span> <span class="n">cloud</span> <span class="ow">in</span> <span class="n">clouds</span><span class="p">)</span>
+
+    <span class="n">merge_result</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">ccPointCloud</span><span class="p">(</span><span class="s2">&quot;MergeResult&quot;</span><span class="p">)</span>
+    <span class="n">merge_result</span><span class="o">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">total_num_points</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">cloud_idx</span><span class="p">,</span> <span class="n">cloud</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clouds</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">point_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cloud</span><span class="o">.</span><span class="n">size</span><span class="p">()):</span>
+            <span class="n">merge_result</span><span class="o">.</span><span class="n">addPoint</span><span class="p">(</span><span class="n">cloud</span><span class="o">.</span><span class="n">getPoint</span><span class="p">(</span><span class="n">point_idx</span><span class="p">))</span>
+
+    <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">cloud</span> <span class="ow">in</span> <span class="n">clouds</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cloud</span><span class="o">.</span><span class="n">getNumberOfScalarFields</span><span class="p">()):</span>
+            <span class="n">scalarFieldName</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">getScalarFieldName</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">merge_result</span><span class="o">.</span><span class="n">getScalarFieldIndexByName</span><span class="p">(</span><span class="n">scalarFieldName</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="n">merge_result</span><span class="o">.</span><span class="n">addScalarField</span><span class="p">(</span><span class="n">scalarFieldName</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Failed to add ScalarField&quot;</span><span class="p">)</span>
+
+            <span class="n">scalarField</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">getScalarField</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">sf</span> <span class="o">=</span> <span class="n">merge_result</span><span class="o">.</span><span class="n">getScalarField</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">sf</span><span class="o">.</span><span class="n">asArray</span><span class="p">()[</span><span class="n">pos</span><span class="p">:</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">scalarField</span><span class="o">.</span><span class="n">size</span><span class="p">()]</span> <span class="o">=</span> <span class="n">scalarField</span><span class="o">.</span><span class="n">asArray</span><span class="p">()[:]</span>
+            <span class="n">sf</span><span class="o">.</span><span class="n">computeMinAndMax</span><span class="p">()</span>
+
+        <span class="n">pos</span> <span class="o">+=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">merge_result</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">CC</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span>
+    <span class="n">clouds</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">getSelectedEntities</span><span class="p">()</span>
+
+    <span class="n">merged_cloud</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">clouds</span><span class="p">)</span>
+    <span class="n">CC</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">merged_cloud</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="crop2d">
+<h2>Crop2D<a class="headerlink" href="#crop2d" title="Permalink to this heading"></a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pycc</span>
+<span class="kn">import</span> <span class="nn">cccorelib</span>
+
+<span class="n">CC</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span>
+<span class="n">pc_to_crop</span> <span class="o">=</span> <span class="n">CC</span><span class="o">.</span><span class="n">getSelectedEntities</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">bbMin</span><span class="p">,</span> <span class="n">bbMax</span> <span class="o">=</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(),</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">()</span>
+<span class="n">pc_to_crop</span><span class="o">.</span><span class="n">getBoundingBox</span><span class="p">(</span><span class="n">bbMin</span><span class="p">,</span> <span class="n">bbMax</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Min </span><span class="si">{</span><span class="n">bbMin</span><span class="si">}</span><span class="s2">, Max: </span><span class="si">{</span><span class="n">bbMax</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">diag</span> <span class="o">=</span> <span class="n">bbMax</span> <span class="o">-</span> <span class="n">bbMin</span>
+
+<span class="n">bbMin</span> <span class="o">=</span> <span class="n">bbMin</span> <span class="o">+</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(</span><span class="n">diag</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">vertices</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">ccPointCloud</span><span class="p">()</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">setName</span><span class="p">(</span><span class="s2">&quot;polyline.vertices&quot;</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">addPoint</span><span class="p">(</span><span class="n">bbMin</span><span class="p">)</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">addPoint</span><span class="p">(</span><span class="n">bbMin</span> <span class="o">+</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">diag</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">addPoint</span><span class="p">(</span><span class="n">bbMin</span> <span class="o">+</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(</span><span class="n">diag</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">diag</span><span class="o">.</span><span class="n">y</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">vertices</span><span class="o">.</span><span class="n">addPoint</span><span class="p">(</span><span class="n">bbMin</span> <span class="o">+</span> <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(</span><span class="n">diag</span><span class="o">.</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="n">polyline</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">ccPolyline</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span>
+<span class="n">polyline</span><span class="o">.</span><span class="n">setClosed</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># This is important, otherwise the polyline would have a size of 0</span>
+<span class="n">polyline</span><span class="o">.</span><span class="n">addPointIndex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vertices</span><span class="o">.</span><span class="n">size</span><span class="p">())</span> 
+
+<span class="c1"># To see the crop area</span>
+<span class="c1"># CC.addToDB(vertices)</span>
+
+<span class="n">cropped_ref</span> <span class="o">=</span> <span class="n">pc_to_crop</span><span class="o">.</span><span class="n">crop2D</span><span class="p">(</span><span class="n">polyline</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">cropped_ref</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Failed to crop&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">cropped_ref</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">cropped</span> <span class="o">=</span> <span class="n">pc_to_crop</span><span class="o">.</span><span class="n">partialClone</span><span class="p">(</span><span class="n">cropped_ref</span><span class="p">)</span>
+    <span class="n">CC</span><span class="o">.</span><span class="n">addToDB</span><span class="p">(</span><span class="n">cropped</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No points fall in crop area&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="using-opengl-transformations">
+<h2>Using OpenGL Transformations<a class="headerlink" href="#using-opengl-transformations" title="Permalink to this heading"></a></h2>
+<section id="translation">
+<h3>Translation<a class="headerlink" href="#translation" title="Permalink to this heading"></a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">This scripts applies a translation of the first selected entity.</span>
+<span class="sd">It&#39;s an OpenGL translation, so coordinates are not changed, its just visual</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pycc</span>
+<span class="kn">import</span> <span class="nn">cccorelib</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<span class="n">entity</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">.</span><span class="n">getSelectedEntities</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Translating the entity</span>
+
+<span class="n">glMat</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">getGLTransformation</span><span class="p">()</span>
+<span class="n">translation</span> <span class="o">=</span> <span class="n">glMat</span><span class="o">.</span><span class="n">getTranslationAsVec3D</span><span class="p">()</span>
+<span class="n">translation</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">10.0</span>
+<span class="n">glMat</span><span class="o">.</span><span class="n">setTranslation</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span>
+
+<span class="n">entity</span><span class="o">.</span><span class="n">setGLTransformation</span><span class="p">(</span><span class="n">glMat</span><span class="p">)</span>
+<span class="n">entity</span><span class="o">.</span><span class="n">applyGLTransformation_recursive</span><span class="p">()</span>
+<span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">.</span><span class="n">redrawAll</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="rotation">
+<h3>Rotation<a class="headerlink" href="#rotation" title="Permalink to this heading"></a></h3>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">This scripts applies a rotation of the first selected entity.</span>
+<span class="sd">It&#39;s an OpenGL rotation, so coordinates are not changed, its just visual</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pycc</span>
+<span class="kn">import</span> <span class="nn">cccorelib</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<span class="n">entity</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">.</span><span class="n">getSelectedEntities</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Rotating the entity around its center</span>
+<span class="c1"># Rotation always happen in OpenGL`s origin which is probably not</span>
+<span class="c1"># the center of our object</span>
+<span class="c1">#</span>
+<span class="c1"># So we have to:</span>
+<span class="c1"># 1 - Translate the matrix by -center of the object</span>
+<span class="c1"># 2 - Rotate the matrix by the desired amount</span>
+<span class="c1"># 3 - Translate the matrix by centre of the object</span>
+
+<span class="n">center</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">getDisplayBB_recursive</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">getCenter</span><span class="p">()</span>
+
+<span class="c1"># 1</span>
+<span class="n">glTrans</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">getGLTransformation</span><span class="p">()</span>
+<span class="n">translation</span> <span class="o">=</span> <span class="n">glTrans</span><span class="o">.</span><span class="n">getTranslationAsVec3D</span><span class="p">()</span>
+<span class="n">translation</span> <span class="o">=</span> <span class="n">translation</span> <span class="o">-</span> <span class="n">center</span>
+<span class="n">glTrans</span><span class="o">.</span><span class="n">setTranslation</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span>
+
+<span class="n">entity</span><span class="o">.</span><span class="n">setGLTransformation</span><span class="p">(</span><span class="n">glTrans</span><span class="p">)</span>
+<span class="n">entity</span><span class="o">.</span><span class="n">applyGLTransformation_recursive</span><span class="p">()</span>
+
+<span class="c1"># 2 &amp; 3</span>
+<span class="n">glRot</span> <span class="o">=</span> <span class="n">pycc</span><span class="o">.</span><span class="n">ccGLMatrix</span><span class="p">()</span>
+<span class="n">glRot</span><span class="o">.</span><span class="n">initFromParameters</span><span class="p">(</span>
+    <span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">45</span><span class="p">),</span>
+    <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+    <span class="n">cccorelib</span><span class="o">.</span><span class="n">CCVector3</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="p">)</span>
+ 
+<span class="n">glMat</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">getGLTransformation</span><span class="p">()</span>
+<span class="n">glMat</span> <span class="o">=</span> <span class="n">glMat</span> <span class="o">*</span> <span class="n">glRot</span><span class="p">;</span>
+
+<span class="n">translation</span> <span class="o">=</span> <span class="n">glMat</span><span class="o">.</span><span class="n">getTranslationAsVec3D</span><span class="p">()</span>
+<span class="n">translation</span> <span class="o">=</span> <span class="n">translation</span> <span class="o">+</span> <span class="n">center</span>
+<span class="n">glMat</span><span class="o">.</span><span class="n">setTranslation</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span>
+
+<span class="n">entity</span><span class="o">.</span><span class="n">setGLTransformation</span><span class="p">(</span><span class="n">glMat</span><span class="p">)</span>
+<span class="n">entity</span><span class="o">.</span><span class="n">applyGLTransformation_recursive</span><span class="p">()</span>
+
+<span class="n">pycc</span><span class="o">.</span><span class="n">GetInstance</span><span class="p">()</span><span class="o">.</span><span class="n">redrawAll</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python/cccorelib/index.html" class="btn btn-neutral float-right" title="cccorelib (Python)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Thomas Montaigu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
